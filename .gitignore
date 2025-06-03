@@ -1,8 +1,13 @@
-npm-debug.log
-coverage/
-node_modules/
-package-lock.json
+node_modules
+dist
+build
+_data
 
-/vendor/
-/*.zip
-/manifest.json
+.cache
+package-lock.json
+yarn.lock
+yarn-error.log
+combine-rules-test
+*.zip
+*.rar
+*.xpi
