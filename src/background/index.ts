@@ -7,9 +7,9 @@ let options = {
 };
 
 let imageBase64 :string;
-let editorTabId = null;
+let editorTabId: number | null = null;
 let tabTitle :string;
-let tabId = null;
+let tabId: number | null = null;
 
 const onMessages = async (request, sender, sendResponse) => {
   try {
@@ -26,11 +26,11 @@ const onMessages = async (request, sender, sendResponse) => {
 
     if (actionType === 'screenshot-fullpage') {
       // await chrome.debugger.sendCommand({ tabId }, "Debugger.enable");
-      imageBase64 = await captureFullpage(tabId, options);
+      imageBase64 = String(await captureFullpage(tabId, options));
 
       if (imageBase64) {
         const tabInfos = await chrome.tabs.create({ url: "editor.html" });
-        editorTabId = tabInfos.id;
+        editorTabId = tabInfos.id ?? null;
         // await chrome.debugger.sendCommand({ tabId }, "Debugger.disable");
         sendResponse({ message: "screenshot-done" });
       }

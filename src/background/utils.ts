@@ -35,7 +35,7 @@ export async function captureFullpage(tabId, options) {
   const { contentSize } = await chrome.debugger.sendCommand(
     { tabId },
     "Page.getLayoutMetrics"
-  );
+  ) as { contentSize: { width: number; height: number } };
   await sleep();
 
   await setDeviceMetricsOverride(tabId, {

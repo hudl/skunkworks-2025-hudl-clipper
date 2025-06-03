@@ -34,9 +34,4 @@ const onCaptureFullpage = async () => {
   await sendMessage({ actionType: "screenshot-fullpage" });
 };
 
-const onOpenEditor = async () => {
-  await chrome.tabs.create({ url: "editor.html" });
-};
-
 document.getElementById("btn-fullpage").addEventListener("click", onCaptureFullpage);
-document.getElementById("btn-open-editor").addEventListener("click", onOpenEditor);
