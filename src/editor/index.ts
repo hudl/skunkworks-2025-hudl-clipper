@@ -7,7 +7,6 @@ const Cropnow = cropLib.default;
 
 const btnShowCropCanvas = document.getElementById("btn-crop")!;
 const btnDownloadCrop = document.getElementById("btn-download-crop")!;
-const btnDownload = document.getElementById("btn-download")!;
 const fileInput = document.getElementById("file-input")!;
 const canvasContainer = document.getElementById("container")!;
 const imgElement = document.getElementById("img")! as HTMLImageElement;
@@ -15,7 +14,6 @@ const alertElement = document.querySelector(".alert")!;
 
 btnShowCropCanvas.style.display = "none";
 btnDownloadCrop.style.display = "none";
-btnDownload.style.display = "none";
 
 let blobUrl: string;
 let cropper: any;
@@ -33,7 +31,6 @@ chrome.runtime.sendMessage({ actionType: "get-screenshot" }, (response) => {
     imgElement.src = blobUrl;
 
     btnShowCropCanvas.style.display = "flex";
-    btnDownload.style.display = "flex";
   }
 });
 
@@ -57,7 +54,6 @@ function onFileChange() {
 
     imgElement.style.display = "none";
     btnDownloadCrop.style.display = "flex";
-    btnDownload.style.display = "none";
 
     imgUrl = URL.createObjectURL(file);
     const img = new Image();
@@ -104,10 +100,6 @@ const onShowCropCanvas = () => {
   cropper = new Cropnow(canvasContainer, { url: blobUrl, onCropEnded });
 };
 
-const onDownload = () => {
-  download(blobUrl);
-};
-
 const onDownloadCroppedImage = () => {
   cropper.toPng(new Date().toISOString().slice(0, 19) + ".png");
 };
@@ -131,9 +123,5 @@ const onMessages = async (request, sender, sendResponse) => {
 
 btnDownloadCrop.addEventListener("click", onDownloadCroppedImage);
 btnShowCropCanvas.addEventListener("click", onShowCropCanvas);
-document.getElementById("btn-download")!.addEventListener("click", onDownload);
-document.getElementById("btn-load-img")!.addEventListener("click", () => {
-  fileInput.click();
-});
 window.addEventListener("beforeunload", onLeavePage);
 chrome.runtime.onMessage.addListener(onMessages);
