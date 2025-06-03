@@ -19,12 +19,16 @@ body {
   box-shadow: 0 1px 2px hsl(0deg 0% 0% / 5%), 0 1px 4px hsl(0deg 0% 0% / 5%), 0 2px 8px hsl(0deg 0% 0% / 5%);
 }
 
-#container, #preview {
+#container,
+#preview {
   width: 100%;
   max-width: 100% !important;
 }
 
-main {padding: 20px; max-width: 100% !important;}
+main {
+  padding: 20px;
+  max-width: 100% !important;
+}
 
 button {
   width: 100%;
@@ -102,7 +106,18 @@ img {
   display: none !important;
 }
 
-.bg-yellow {background-color: #ff9800;}
-.bg-green {background-color: #32b027;}
-.bg-viola {background-color: #9c27b0;}
-.bg-gray {background-color: #505050;}
+.bg-yellow {
+  background-color: #ff9800;
+}
+
+.bg-green {
+  background-color: #32b027;
+}
+
+.bg-viola {
+  background-color: #9c27b0;
+}
+
+.bg-gray {
+  background-color: #505050;
+}

@@ -40,16 +40,6 @@ if [[ "$browserType" == "firefox" ]]; then
   ' sh {} +
 fi
 
-# create zip file for dist
-echo -e "\n$YELLOW"
-read -p 'Do you really want to create zip file? (Yes | No)
-> ' create_zip
-echo -e "\n$ENDCOLOR"
-
-if [[ "$create_zip" == "yes" ]]; then
-  (cd $dist_dir; zip -r ../"$browserType".zip .)
-fi
-
 # Push changes
 echo -e "\n$YELLOW"
 read -p "Do you really want to push changes to Github? (Yes | No)

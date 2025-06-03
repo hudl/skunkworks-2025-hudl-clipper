@@ -1,16 +1,16 @@
-import { parse, resolve } from 'path';
-import { defineConfig, UserConfigExport } from 'vite';
+import { parse, resolve } from "path";
+import { defineConfig, UserConfigExport } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  root: 'src',
-  publicDir: 'src/static',
+  root: "src",
+  publicDir: "src/static",
   build: {
     rollupOptions: {
       input: {
-        background: resolve(__dirname, 'src', 'background', 'index.ts'),        
-        editor: resolve(__dirname, 'src', 'editor.html'),
-        popup: resolve(__dirname, 'src', 'popup.html')
+        background: resolve(__dirname, "src", "background", "index.ts"),
+        editor: resolve(__dirname, "src", "editor.html"),
+        popup: resolve(__dirname, "src", "popup.html"),
       },
       output: {
         dir: "dist",
@@ -21,6 +21,6 @@ export default defineConfig({
           return `${name}.[ext]`;
         },
       },
-    }
-  }
+    },
+  },
 } as UserConfigExport);

@@ -1,6 +1,6 @@
 {
-  "name": "screenshot-fullpage-extension",
-  "version": "2.0.5",
+  "name": "Hudl Clipper Tool",
+  "version": "1.0.0",
   "description": "Screenshot tool for making a full page or partial screen capture with further edit, download or text adding",
   "main": "index.js",
   "private": true,

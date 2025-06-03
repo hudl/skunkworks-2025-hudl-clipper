@@ -24,15 +24,6 @@ const onMessages = async (request, sender, sendResponse) => {
       sendResponse({ imageBase64, editorTabId, tabTitle });
     }
 
-    if (actionType === 'screenshot-visiblepage') {
-      imageBase64 = await chrome.tabs.captureVisibleTab(null, { format: options.format });
-
-      if (imageBase64) {
-        const tabInfos = await chrome.tabs.create({ url: "editor.html" });
-        editorTabId = tabInfos.id;
-      }
-    }
-
     if (actionType === 'screenshot-fullpage') {
       // await chrome.debugger.sendCommand({ tabId }, "Debugger.enable");
       imageBase64 = await captureFullpage(tabId, options);
