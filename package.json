@@ -1,0 +1,25 @@
+{
+  "name": "screenshot-fullpage-extension",
+  "version": "2.0.5",
+  "description": "Screenshot tool for making a full page or partial screen capture with further edit, download or text adding",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=dev vite build -w",
+    "build": "vite build && cp -R static/. dist",
+    "zip": "cd dist && zip -r ../chrome.zip ."
+  },
+  "dependencies": {
+    "cropnow": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "@types/node": "^20.12.12",
+    "vite": "^5.2.11"
+  },
+  "author": "Haikel Fazzani",
+  "license": "MIT",
+  "keywords": [
+    "screenshot"
+  ]
+}
