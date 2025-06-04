@@ -2,7 +2,7 @@ import { captureFullpage } from './utils.js';
 
 let options = {
   deviceScaleFactor: 1,
-  format: "png",
+  format: 'png',
   fromSurface: true,
 };
 
@@ -25,14 +25,14 @@ const onMessages = async (request, sender, sendResponse) => {
     }
 
     if (actionType === 'screenshot-fullpage') {
-      // await chrome.debugger.sendCommand({ tabId }, "Debugger.enable");
+      // await chrome.debugger.sendCommand({ tabId }, 'Debugger.enable');
       imageBase64 = String(await captureFullpage(tabId, options));
 
       if (imageBase64) {
-        const tabInfos = await chrome.tabs.create({ url: "editor.html" });
+        const tabInfos = await chrome.tabs.create({ url: 'editor.html' });
         editorTabId = tabInfos.id ?? null;
-        // await chrome.debugger.sendCommand({ tabId }, "Debugger.disable");
-        sendResponse({ message: "screenshot-done" });
+        // await chrome.debugger.sendCommand({ tabId }, 'Debugger.disable');
+        sendResponse({ message: 'screenshot-done' });
       }
     }
   } catch (error) {

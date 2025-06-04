@@ -13,7 +13,7 @@ export function setDeviceMetricsOverride(tabId, { height, width }) {
   return new Promise((resolve) => {
     chrome.debugger.sendCommand(
       { tabId },
-      "Emulation.setDeviceMetricsOverride",
+      'Emulation.setDeviceMetricsOverride',
       ops,
       resolve
     );
@@ -21,20 +21,20 @@ export function setDeviceMetricsOverride(tabId, { height, width }) {
 }
 
 export async function captureFullpage(tabId, options) {
-  await chrome.debugger.attach({ tabId }, "1.3");
-  await chrome.debugger.sendCommand({ tabId }, "Page.enable");
+  await chrome.debugger.attach({ tabId }, '1.3');
+  await chrome.debugger.sendCommand({ tabId }, 'Page.enable');
   await sleep();
 
   await chrome.debugger.sendCommand(
     { tabId },
-    "Emulation.setDefaultBackgroundColorOverride",
+    'Emulation.setDefaultBackgroundColorOverride',
     { color: { r: 0, g: 0, b: 0, a: 0 } }
   );
   await sleep();
 
   const { contentSize } = await chrome.debugger.sendCommand(
     { tabId },
-    "Page.getLayoutMetrics"
+    'Page.getLayoutMetrics'
   ) as { contentSize: { width: number; height: number } };
   await sleep();
 
@@ -47,7 +47,7 @@ export async function captureFullpage(tabId, options) {
     const ops = { format: options.format, fromSurface: options.fromSurface };
     chrome.debugger.sendCommand(
       { tabId },
-      "Page.captureScreenshot",
+      'Page.captureScreenshot',
       ops,
       async (response) => {
         if (chrome.runtime.lastError) {
@@ -57,7 +57,7 @@ export async function captureFullpage(tabId, options) {
           await sleep(Math.ceil(contentSize.height / 30));
           await chrome.debugger.sendCommand(
             { tabId },
-            "Emulation.clearDeviceMetricsOverride"
+            'Emulation.clearDeviceMetricsOverride'
           ); // returns empty object
           await chrome.debugger.detach({ tabId });
           await sleep();

@@ -1,13 +1,13 @@
-import "./popup.css";
+import './popup.css';
 
 function showAlert(text) {
-  let alert = document.getElementById("alert");
+  let alert = document.getElementById('alert');
   if (alert) alert.textContent = text;
   else {
-    alert = document.createElement("pre");
-    alert.classList.add("alert");
+    alert = document.createElement('pre');
+    alert.classList.add('alert');
     alert.textContent = text;
-    alert.id = "alert";
+    alert.id = 'alert';
     document.body.appendChild(alert);
   }
 }
@@ -17,8 +17,8 @@ const sendMessage = async (msg) => {
     const tabs = await chrome.tabs.query({ currentWindow: true, active: true });
     const currentTab = tabs[0];
 
-    if (typeof currentTab.url !== "undefined" && currentTab.url.includes("chrome://")) {
-      throw new Error("This page is not supported...");
+    if (typeof currentTab.url !== 'undefined' && currentTab.url.includes('chrome://')) {
+      throw new Error('This page is not supported...');
     } else
       return await chrome.runtime.sendMessage({
         currentTabId: currentTab.id,
@@ -26,12 +26,13 @@ const sendMessage = async (msg) => {
         ...msg,
       });
   } catch (error) {
-    if (!error.message.includes("message port")) showAlert(error.message);
+    if (!error.message.includes('message port')) showAlert(error.message);
   }
 };
 
 const onCaptureFullpage = async () => {
-  await sendMessage({ actionType: "screenshot-fullpage" });
+  await sendMessage({ actionType: 'screenshot-fullpage' });
 };
 
-document.getElementById("btn-fullpage").addEventListener("click", onCaptureFullpage);
+const btnCapture = document.getElementById('btn-capture')!;
+btnCapture.addEventListener('click', onCaptureFullpage);
