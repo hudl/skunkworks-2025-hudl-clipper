@@ -12,21 +12,33 @@
   </head>
 
   <body class="w-100">
-    <div class="menu">
-      <button class="w-100" id="btn-crop" hidden="hidden">
+
+    <div class="editor">
+
+      <button id="btn-crop" hidden="hidden">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 16 16">
           <path d="M3.5.5A.5.5 0 0 1 4 1v13h13a.5.5 0 0 1 0 1h-2v2a.5.5 0 0 1-1 0v-2H3.5a.5.5 0 0 1-.5-.5V4H1a.5.5 0 0 1 0-1h2V1a.5.5 0 0 1 .5-.5zm2.5 3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0V4H6.5a.5.5 0 0 1-.5-.5z"/>
         </svg>crop image
       </button>
 
-      <button class="w-100 bg-yellow" id="btn-download-crop" hidden="hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 16 16">
-          <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-          <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-        </svg>download cropped image
-      </button>
+      <img src="icon32.png" style="width:revert;border:0;">
 
-      <input class="file-input" type="file" id="file-input" accept=".webm,.jpg,.jpeg,.png" hidden="hidden"/>
+      <div class="menu">
+
+        <form class="menu-title">
+          <span style="margin-right:8px;">Title: </span>
+          <input type="text" id="title" placeholder="Name this clip (optional)" maxlength="100" style="padding:6px;width:250px;border-radius:4px;">
+        </form>
+
+        <button class="bg-hudl save-clip" id="btn-save-clip" hidden="hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewbox="0 0 16 16">
+            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+          </svg>save clip
+        </button>
+
+        <input class="file-input" type="file" id="file-input" accept=".webm,.jpg,.jpeg,.png" hidden="hidden"/>
+      </div>
     </div>
 
     <main>

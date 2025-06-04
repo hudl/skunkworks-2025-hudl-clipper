@@ -6,17 +6,18 @@ import "../../node_modules/cropnow/index.css";
 const Cropnow = cropLib.default;
 
 const btnShowCropCanvas = document.getElementById("btn-crop")!;
-const btnDownloadCrop = document.getElementById("btn-download-crop")!;
+const btnSaveClip = document.getElementById("btn-save-clip")!;
 const fileInput = document.getElementById("file-input")!;
 const canvasContainer = document.getElementById("container")!;
 const imgElement = document.getElementById("img")! as HTMLImageElement;
 const alertElement = document.querySelector(".alert")!;
 
 btnShowCropCanvas.style.display = "none";
-btnDownloadCrop.style.display = "none";
+btnSaveClip.style.display = "none";
 
 let blobUrl: string;
 let cropper: any;
+let title: string;
 
 let imgUrl: any;
 let imgWidth;
@@ -52,7 +53,7 @@ function onFileChange() {
     if (cropper) cropper.reset();
 
     imgElement.style.display = "none";
-    btnDownloadCrop.style.display = "flex";
+    btnSaveClip.style.display = "flex";
 
     imgUrl = URL.createObjectURL(file);
     const img = new Image();
@@ -77,7 +78,7 @@ function onFileChange() {
 const onShowCropCanvas = () => {
   if (cropper) return;
 
-  btnDownloadCrop.style.display = "flex";
+  btnSaveClip.style.display = "flex";
   imgElement.style.display = "none";
 
   const img = new Image();
@@ -99,7 +100,15 @@ const onShowCropCanvas = () => {
 };
 
 const onDownloadCroppedImage = () => {
-  cropper.toPng(new Date().toISOString().slice(0, 19) + ".png");
+  const titleInput = document.getElementById('title') as HTMLInputElement | null;
+  title = titleInput ? titleInput.value : '';
+  if (title === '') {
+    title = new Date().toISOString().slice(0, 19);
+  }
+  cropper.toPng(title);
+  if (titleInput){
+    titleInput.value = '';
+  }
 };
 
 const onLeavePage = (e) => {
@@ -116,7 +125,7 @@ const onMessages = async (request, sender, sendResponse) => {
   sendResponse({ from: "editor" });
 };
 
-btnDownloadCrop.addEventListener("click", onDownloadCroppedImage);
+btnSaveClip.addEventListener("click", onDownloadCroppedImage);
 btnShowCropCanvas.addEventListener("click", onShowCropCanvas);
 window.addEventListener("beforeunload", onLeavePage);
 chrome.runtime.onMessage.addListener(onMessages);

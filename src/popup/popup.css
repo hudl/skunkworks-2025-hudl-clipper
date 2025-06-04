@@ -53,10 +53,6 @@ button {
   -webkit-font-smoothing: antialiased
 }
 
-.capture-btn {
-  background-color: #FF6300;
-}
-
 button:hover,
 button:hover svg path {
   background-color: #1a73e811;
@@ -106,5 +102,6 @@ img {
   display: none !important;
 }
 
-
 .bg-gray {background-color: #505050;}
+
+.bg-hudl { background-color: #FF6300; }
