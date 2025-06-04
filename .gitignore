@@ -2,7 +2,7 @@ node_modules
 dist
 build
 _data
-
+.env
 .cache
 package-lock.json
 yarn.lock
