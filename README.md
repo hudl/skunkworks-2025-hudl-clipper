@@ -9,8 +9,8 @@
 `sh build.sh`
 
 ## Install
-Navigate to chrome://extensions/
-Select Developer Mode in the top right corner
+Navigate to chrome://extensions/ <br>
+Select Developer Mode in the top right corner <br>
 Select Load Unpacked in the top left corner, and then select the DIST dir
 
 ## Notes
