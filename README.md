@@ -2,11 +2,16 @@
   <h4 style="margin-top:0">Hudl Clipper Tool</h4>
 </div>
 
-## Install
+## Dependencies
 `npm i`
 
 ## Build
 `sh build.sh`
+
+## Install
+Navigate to chrome://extensions/
+Select Developer Mode in the top right corner
+Select Load Unpacked in the top left corner, and then select the DIST dir
 
 ## Notes
 - Built with [DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
