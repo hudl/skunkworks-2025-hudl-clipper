@@ -30,7 +30,9 @@ chrome.runtime.sendMessage({ actionType: "get-screenshot" }, (response) => {
     imgElement.style.display = "block";
     imgElement.src = blobUrl;
 
-    btnShowCropCanvas.style.display = "flex";
+    if (btnShowCropCanvas) {
+      btnShowCropCanvas.click();
+    }
   }
 });
 
@@ -48,9 +50,6 @@ function onFileChange() {
 
   if (file) {
     if (cropper) cropper.reset();
-
-    if (imgUrl) URL.revokeObjectURL(imgUrl);
-    if (blobUrl) URL.revokeObjectURL(blobUrl);
 
     imgElement.style.display = "none";
     btnDownloadCrop.style.display = "flex";
@@ -80,7 +79,6 @@ const onShowCropCanvas = () => {
 
   btnDownloadCrop.style.display = "flex";
   imgElement.style.display = "none";
-  btnShowCropCanvas.style.display = "none";
 
   const img = new Image();
 
@@ -106,14 +104,11 @@ const onDownloadCroppedImage = () => {
 
 const onLeavePage = (e) => {
   try {
-    const confirmationMessage = "Are you sure you want to leave?";
-    (e || window.event).returnValue = confirmationMessage;
     if (blobUrl) {
       window.URL.revokeObjectURL(blobUrl);
     }
-    return confirmationMessage;
   } catch (error) {
-    if (blobUrl) window.URL.revokeObjectURL(blobUrl);
+      return;
   }
 };
 
