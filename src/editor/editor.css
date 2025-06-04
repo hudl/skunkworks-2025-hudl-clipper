@@ -22,7 +22,7 @@ body {
   gap: 10px;
 }
 
-.menu-title {
+.menu-item {
   display: flex;
   flex-direction: row;
   align-items: center;

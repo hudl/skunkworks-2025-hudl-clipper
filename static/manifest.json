@@ -2,7 +2,7 @@
   "name": "Hudl Clipper Tool",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Chrome extension to clip images from websites for Fastmodel.",
+  "description": "Chrome extension to clip images from websites for Fastscout.",
   "icons": {
     "32": "icon32.png",
     "64": "icon64.png",
