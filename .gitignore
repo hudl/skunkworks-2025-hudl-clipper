@@ -11,4 +11,4 @@ combine-rules-test
 *.zip
 *.rar
 *.xpi
-*.DS_Store
+.DS_Store
