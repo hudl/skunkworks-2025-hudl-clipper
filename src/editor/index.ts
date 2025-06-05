@@ -298,13 +298,15 @@ const uploadCroppedImage = async () => {
     let canvas = cropper.getCanvas();
     let dataURL = canvas.toDataURL('image/png');
 
+    let imgObject = await fetch(dataURL);
+    let imgBlob = await imgObject.blob();
+
     let base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
     let binaryString = atob(base64Data);
     let imageSize = binaryString.length;
 
     let formData = new FormData();
-    let blob = await fetch(dataURL).then(res => res.blob());
-    formData.append('uploadedFile', blob, title+'.png');
+    formData.append('uploadedFile', imgBlob, title+'.png');
     formData.append('imageSize', imageSize.toString());
 
     let imageData = await postData(imageUrl, 'multipart/form-data', formData);
