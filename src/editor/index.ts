@@ -213,8 +213,6 @@ async function postData(url = '', contentType, data) {
 
 const uploadCroppedImage = async () => {
   try {
-    debugger;
-
     // First we need to get the report id from the select element
     let reportId = (selectReports as HTMLSelectElement).value;
     if (!reportId) {
@@ -308,7 +306,14 @@ const uploadCroppedImage = async () => {
     formData.append('imageSize', imgBlob.size.toString());
 
     let imageData = await postData(imageUrl, null, formData);
-    console.log(imageData);
+    if (!imageData || imageData.length === 0) {
+      throw new Error('Image upload failed');
+    } else {
+      alert('Image upload successfully completed!');
+      setTimeout(function() {
+        window.close();
+      }, 2000);
+    }
 
   } catch (error) {
     console.error(error.message);
