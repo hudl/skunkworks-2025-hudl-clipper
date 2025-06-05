@@ -293,13 +293,19 @@ const uploadCroppedImage = async () => {
     }
 
     // Now we can upload the cropped image to the tile
-    let imageUrl = baseUrl + reportId + '/' + tileId + '/image';
+    let imageUrl = baseUrl + reportId + '/tile/' + tileId + '/image';
 
     let canvas = cropper.getCanvas();
     let dataURL = canvas.toDataURL('image/png');
+
+    let base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
+    let binaryString = atob(base64Data);
+    let imageSize = binaryString.length;
+
     let formData = new FormData();
     let blob = await fetch(dataURL).then(res => res.blob());
-    formData.append('image', blob, title+'.png');
+    formData.append('uploadedFile', blob, title+'.png');
+    formData.append('imageSize', imageSize.toString());
 
     let imageData = await postData(imageUrl, 'multipart/form-data', formData);
     console.log(imageData);
