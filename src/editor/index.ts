@@ -232,7 +232,6 @@ const uploadCroppedImage = async () => {
     let pageResponse = Object.values(pages);
     if (Array.isArray(pageResponse)) {
       let pageArray = pageResponse[0];
-      console.log('page array: '+JSON.stringify(pageArray));
       if (Array.isArray(pageArray)) {
         let page = pageArray.pop();
         pageId = page['page_id'];
@@ -286,7 +285,6 @@ const uploadCroppedImage = async () => {
     let tileResponse = Object.values(tiles);
     if (Array.isArray(tileResponse)) {
       let tileArray = tileResponse[0];
-      console.log('tile array: '+JSON.stringify(tileArray));
       if (Array.isArray(tileArray)) {
         let tile = tileArray.pop();
         tileId = tile['tile_id'];
