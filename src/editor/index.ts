@@ -189,14 +189,17 @@ const downloadCroppedImage = () => {
   cropper.toPng(title);
 };
 
-async function postData(url = '', contentType = 'multipart/form-data', data) {
+async function postData(url = '', contentType, data) {
   try {
+    const myHeaders = new Headers();
+    myHeaders.append('Authorization', 'Bearer ' + token);
+    if (contentType) {
+      myHeaders.append('Content-Type', contentType);
+    }
+
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Authorization': 'Bearer '+ token,
-        'Content-Type': contentType
-      },
+      headers: myHeaders,
       body: data ? data : null
     });
     if (!response.ok) {
@@ -302,15 +305,11 @@ const uploadCroppedImage = async () => {
     let imgObject = await fetch(dataURL);
     let imgBlob = await imgObject.blob();
 
-    let base64Data = dataURL.substring(dataURL.indexOf(',') + 1);
-    let binaryString = atob(base64Data);
-    let imageSize = binaryString.length;
-
     let formData = new FormData();
     formData.append('uploadedFile', imgBlob, title+'.png');
-    formData.append('imageSize', imageSize.toString());
+    formData.append('imageSize', imgBlob.size.toString());
 
-    let imageData = await postData(imageUrl, 'multipart/form-data', formData);
+    let imageData = await postData(imageUrl, null, formData);
     console.log(imageData);
 
   } catch (error) {
