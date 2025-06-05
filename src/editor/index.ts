@@ -6,7 +6,9 @@ import '../../node_modules/cropnow/index.css';
 const Cropnow = cropLib.default;
 
 const token = import.meta.env.VITE_FASTMODEL_TOKEN;
+const baseUrl = 'https://fastreport-bg.fastmodelsports.com/1/report/';
 
+const titleInput = document.getElementById('title')!;
 const selectReports = document.getElementById('reports')!;
 const btnShowCropCanvas = document.getElementById('btn-crop')!;
 const btnSaveClip = document.getElementById('btn-save-clip')!;
@@ -22,33 +24,47 @@ let isDownload = true;
 
 let blobUrl: string;
 let cropper: any;
-let title: string;
+let title = '', string;
 
 let imgUrl: any;
 let imgWidth;
 let imgHeight;
 
-async function getReports() {
-  const url = 'https://fastreport-bg.fastmodelsports.com/1/report/';
+const onChangeTite = () => {
+  title = titleInput ? (titleInput as HTMLInputElement).value : '';
+};
+
+titleInput.addEventListener('change', onChangeTite);
+
+// Function to fetch data from the server
+async function getData(url = '', contentType = 'application/x-www-form-urlencoded') {
   try {
-    const response = await fetch(url,{
-        method: 'GET',
-        headers: new Headers({
-            'Authorization': 'Bearer '+ token,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        })
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+          'Authorization': 'Bearer '+ token,
+          'Content-Type': contentType
+      }
     });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
+    return response.json();
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 
-    let report_response = Object.values(await response.json());
-
-    if (Array.isArray(report_response)) {
-      let reports = report_response[0];
+// Function to get reports from the server
+async function getReports() {
+  try {
+    let jsonData = await getData(baseUrl);
+    let reportResponse = Object.values(jsonData);
+    if (Array.isArray(reportResponse)) {
+      let reports = reportResponse[0];
       if (Array.isArray(reports)) {
         //Create and append the options
-        for (var i = 0; i < reports.length; i++) {
+        for (let i = 0; i < reports.length; i++) {
             var option = document.createElement('option');
             option.value = reports[i]['report_id'];
             option.text = reports[i]['subtitle'];
@@ -59,6 +75,21 @@ async function getReports() {
 
   } catch (error) {
     console.error(error.message);
+  }
+}
+
+// Function to get the pages by report ID
+async function getPagesByReportId(reportId = '') {
+  try {
+    if (!reportId) {
+      throw new Error('Report ID is required');
+    }
+    let url = baseUrl + reportId + '/page';
+    let jsonData = await getData(url);
+    return jsonData;
+  } catch (error) {
+    console.error(error.message);
+    return [];
   }
 }
 
@@ -154,17 +185,143 @@ const onShowCropCanvas = () => {
   cropper = new Cropnow(canvasContainer, { url: blobUrl, onCropEnded });
 };
 
-const onDownloadCroppedImage = () => {
-  const titleInput = document.getElementById('title') as HTMLInputElement | null;
-  title = titleInput ? titleInput.value : '';
+const downloadCroppedImage = () => {
+  cropper.toPng(title);
+};
+
+async function postData(url = '', contentType = 'multipart/form-data', data) {
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer '+ token,
+        'Content-Type': contentType
+      },
+      body: data ? data : null
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+const uploadCroppedImage = async () => {
+  try {
+    debugger;
+
+    // First we need to get the report id from the select element
+    let reportId = (selectReports as HTMLSelectElement).value;
+    if (!reportId) {
+      throw new Error('Please select a report');
+    }
+
+    // Next we need to get the pages for the selected report
+    let pages = await getPagesByReportId(reportId);
+    if (!pages || pages.length === 0) {
+      throw new Error('No pages found for the selected report');
+    }
+
+    // Select the last page from the pages array
+    let pageId = '';
+    let pageResponse = Object.values(pages);
+    if (Array.isArray(pageResponse)) {
+      let pageArray = pageResponse[0];
+      if (Array.isArray(pageArray)) {
+        let page = pageArray.pop();
+        pageId = page['page_id'];
+        if (!pageId) {
+          throw new Error('Page ID not found');
+        }
+      }
+    }
+
+    // Next we need to get the image dimensions
+    let cropData = cropper.getData();
+    let cropWidth = cropData.cropBox.width;
+    let cropHeight = cropData.cropBox.height;
+
+    // Next we need to create a tile for the page of the report
+    let tileUrl = baseUrl + reportId + '/tile';
+
+    let widgetData = {
+      "image":"",
+      "widgetType":"image",
+      "widgetTitle":"Image",
+      "showTitle":true,
+      "isScaled":true
+    };
+    let gridData = {
+      "y":0,
+      "w":cropWidth,
+      "h":cropHeight,
+      "minH":10,
+      "x":0,
+      "isNew":true
+    };
+    let tileObject = {
+      "tiles": [{
+        "version": 2,
+        "isNew": Date.now(),
+        "report_id": parseInt(reportId),
+        "page_id": pageId,
+        "widget_data": JSON.stringify(widgetData),
+        "grid_data": JSON.stringify(gridData)
+      }]
+    };
+
+    let tiles = await postData(tileUrl, 'application/json', JSON.stringify(tileObject));
+    console.log(tiles);
+    if (!tiles || tiles.length === 0) {
+      throw new Error('No tiles were created for the selected report');
+    }
+
+    // Select the last page from the pages array
+    let tileId = '';
+    let tileResponse = Object.values(tiles);
+    if (Array.isArray(tileResponse)) {
+      let tileArray = tileResponse[0];
+      if (Array.isArray(tileArray)) {
+        let tile = tileArray.pop();
+        tileId = tile['tile_id'];
+        if (!tileId) {
+          throw new Error('Tile ID not found in response');
+        }
+      }
+    }
+
+    // Now we can upload the cropped image to the tile
+    let imageUrl = baseUrl + reportId + '/' + tileId + '/image';
+
+    let canvas = cropper.getCanvas();
+    let dataURL = canvas.toDataURL('image/png');
+    let formData = new FormData();
+    let blob = await fetch(dataURL).then(res => res.blob());
+    formData.append('image', blob, title+'.png');
+
+    let imageData = await postData(imageUrl, 'multipart/form-data', formData);
+    console.log(imageData);
+
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+const onSaveClip = () => {
   if (title === '') {
     title = new Date().toISOString().slice(0, 19);
   }
-  cropper.toPng(title);
-  if (titleInput){
-    titleInput.value = '';
+  if (isDownload) {
+    downloadCroppedImage();
+  } else {
+    uploadCroppedImage();
   }
-};
+  if (titleInput) {
+    (titleInput as HTMLInputElement).value = '';
+  }
+}
 
 const onLeavePage = (e) => {
   try {
@@ -180,7 +337,7 @@ const onMessages = async (request, sender, sendResponse) => {
   sendResponse({ from: 'editor' });
 };
 
-btnSaveClip.addEventListener('click', onDownloadCroppedImage);
+btnSaveClip.addEventListener('click', onSaveClip);
 btnShowCropCanvas.addEventListener('click', onShowCropCanvas);
 window.addEventListener('beforeunload', onLeavePage);
 chrome.runtime.onMessage.addListener(onMessages);
